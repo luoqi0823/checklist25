@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25岁人生已完成清单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #5a67d8;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .intro {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .checklist {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .item:hover {
+            transform: translateX(5px);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .item.completed {
+            background: #f0fff4;
+            border-color: #48bb78;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #cbd5e0;
+            border-radius: 6px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .item.completed .checkbox {
+            background: #48bb78;
+            border-color: #48bb78;
+        }
+
+        .checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .item.completed .checkbox::after {
+            opacity: 1;
+        }
+
+        .item-text {
+            flex: 1;
+            font-size: 1.05em;
+            color: #2d3748;
+        }
+
+        .item-number {
+            color: #a0aec0;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        .score-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .score-section.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .score-display {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .score-label {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .message {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.1em;
+            line-height: 1.6;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #5a67d8;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #4c51bf;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(90, 103, 216, 0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 25岁人生已完成清单</h1>
+        <p class="subtitle">回顾你的成长轨迹，每一项都值得被看见</p>
+        
+        <div class="intro">
+            <p>这个清单包含了25岁年轻人通常经历的人生里程碑。点击每一项选择"已完成"，每题2分，满分100分。</p>
+            <p>记住：人生没有标准答案，这个清单只是为了帮助你回顾自己的成长，而非评判标准。</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p style="text-align: center; color: #666; margin-bottom: 20px;">
+            已完成: <span id="completedCount">0</span>/50 项
+        </p>
+
+        <div class="checklist" id="checklist">
+            <!-- 教育成长类 -->
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">01.</span>
+                <span class="item-text">完成义务教育（小学/初中/高中）</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">02.</span>
+                <span class="item-text">经历高考或同等级别的升学考试</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">03.</span>
+                <span class="item-text">进入大学/专科或职业学校学习</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">04.</span>
+                <span class="item-text">获得第一个学位证书或毕业证书</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">05.</span>
+                <span class="item-text">掌握一门外语的基础沟通能力</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">06.</span>
+                <span class="item-text">学会骑自行车</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">07.</span>
+                <span class="item-text">学会游泳</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">08.</span>
+                <span class="item-text">考取驾照</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">09.</span>
+                <span class="item-text">掌握一项乐器或艺术形式</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">10.</span>
+                <span class="item-text">读过至少50本课外书籍</span>
+            </div>
+
+            <!-- 人际关系类 -->
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">11.</span>
+                <span class="item-text">拥有持续3年以上的友谊</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">12.</span>
+                <span class="item-text">经历初恋</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">13.</span>
+                <span class="item-text">谈过一段正式的恋爱关系</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">14.</span>
+                <span class="item-text">经历分手并从中成长</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">15.</span>
+                <span class="item-text">向父母表达过感谢或爱意</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">16.</span>
+                <span class="item-text">与原生家庭达成一定程度的和解</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">17.</span>
+                <span class="item-text">结交来自不同背景的朋友</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">18.</span>
+                <span class="item-text">参加过同学聚会或老友重逢</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">19.</span>
+                <span class="item-text">照顾过生病的家人或朋友</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">20.</span>
+                <span class="item-text">在困难时向他人寻求过帮助</span>
+            </div>
+
+            <!-- 职业经济类 -->
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">21.</span>
+                <span class="item-text">拥有第一份兼职或实习经历</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">22.</span>
+                <span class="item-text">通过自己努力赚到第一笔钱</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">23.</span>
+                <span class="item-text">正式入职第一份工作</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">24.</span>
+                <span class="item-text">经历过辞职或跳槽</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">25.</span>
+                <span class="item-text">给父母买过礼物或给过家用</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">26.</span>
+                <span class="item-text">拥有属于自己的银行账户和存款</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">27.</span>
+                <span class="item-text">经历过失业或求职困难期</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">28.</span>
+                <span class="item-text">独立完成过一个工作项目</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">29.</span>
+                <span class="item-text">被上司或客户表扬认可</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">30.</span>
+                <span class="item-text">明确自己的职业方向或兴趣领域</span>
+            </div>
+
+            <!-- 生活体验类 -->
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">31.</span>
+                <span class="item-text">独自生活过（租房或住宿舍）</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">32.</span>
+                <span class="item-text">学会做至少3道拿手菜</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">33.</span>
+                <span class="item-text">去过至少3个不同的城市旅行</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">34.</span>
+                <span class="item-text">看过大海或爬过高山</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">35.</span>
+                <span class="item-text">看过日出或星空</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">36.</span>
+                <span class="item-text">参加过音乐节、演唱会或大型活动</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">37.</span>
+                <span class="item-text">尝试过极限运动或刺激体验（过山车、跳伞等）</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">38.</span>
+                <span class="item-text">养过宠物或植物</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">39.</span>
+                <span class="item-text">有过通宵经历（学习、工作或娱乐）</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">40.</span>
+                <span class="item-text">体验过独自旅行</span>
+            </div>
+
+            <!-- 个人成长类 -->
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">41.</span>
+                <span class="item-text">经历过重大失败或挫折</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">42.</span>
+                <span class="item-text">从挫折中恢复并重新站起来</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">43.</span>
+                <span class="item-text">明确自己的价值观和底线</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">44.</span>
+                <span class="item-text">学会独处并享受孤独</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">45.</span>
+                <span class="item-text">有过深刻的自我反思时刻</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">46.</span>
+                <span class="item-text">改变过某个不良习惯</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">47.</span>
+                <span class="item-text">坚持某项爱好或习惯超过一年</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">48.</span>
+                <span class="item-text">为自己设定过人生目标</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">49.</span>
+                <span class="item-text">学会管理情绪，不再轻易崩溃</span>
+            </div>
+            <div class="item" onclick="toggleItem(this)">
+                <div class="checkbox"></div>
+                <span class="item-number">50.</span>
+                <span class="item-text">接纳不完美的自己，与自己和解</span>
+            </div>
+        </div>
+
+        <button class="btn" onclick="calculateScore()">查看我的得分与总结</button>
+
+        <div class="score-section" id="scoreSection">
+            <div class="score-label">你的25岁人生丰富度得分</div>
+            <div class="score-display" id="scoreDisplay">0</div>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="completedStat">0</div>
+                    <div class="stat-label">已完成项</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="remainingStat">0</div>
+                    <div class="stat-label">待体验项</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="percentageStat">0%</div>
+                    <div class="stat-label">完成度</div>
+                </div>
+            </div>
+            <div class="message" id="message"></div>
+            <button class="btn" onclick="resetChecklist()" style="margin-top: 20px; background: rgba(255,255,255,0.3);">重新测试</button>
+        </div>
+    </div>
+
+    <script>
+        let completedItems = 0;
+
+        function toggleItem(element) {
+            element.classList.toggle('completed');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            completedItems = document.querySelectorAll('.item.completed').length;
+            document.getElementById('completedCount').textContent = completedItems;
+            const percentage = (completedItems / 50) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        function calculateScore() {
+            const score = completedItems * 2;
+            const percentage = (completedItems / 50) * 100;
+            
+            document.getElementById('scoreDisplay').textContent = score;
+            document.getElementById('completedStat').textContent = completedItems;
+            document.getElementById('remainingStat').textContent = 50 - completedItems;
+            document.getElementById('percentageStat').textContent = percentage.toFixed(0) + '%';
+            
+            const message = generateMessage(score, completedItems);
+            document.getElementById('message').innerHTML = message;
+            
+            document.getElementById('scoreSection').classList.add('show');
+            document.getElementById('scoreSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateMessage(score, count) {
+            if (score >= 90) {
+                return `<strong>🌟 超级体验家！</strong><br><br>
+                你已经完成了${count}项人生体验，得分${score}分！25岁的你拥有远超同龄人的丰富经历。<br><br>
+                你像一块海绵一样吸收着世界的养分，每一段经历都让你更加成熟通透。但请记住，人生不是打卡比赛，接下来的旅程，愿你保持好奇，但也学会深耕。那些"未完成"的空白，不是遗憾，而是留给未来自己的礼物。`;
+            } else if (score >= 70) {
+                return `<strong>🚀 稳健前行者！</strong><br><br>
+                你已完成${count}项，得分${score}分，这是一个非常扎实的成绩。<br><br>
+                25岁的你已经在教育、工作、情感等多个维度建立了稳固的基础。你既经历过风雨，也见过彩虹。接下来的五年，是厚积薄发的关键时期。那些还未打勾的项目，正是你未来探索的方向。相信自己，你走在一条很好的路上。`;
+            } else if (score >= 50) {
+                return `<strong>🌱 蓄势待发的探索者</strong><br><br>
+                你已完成${count}项，得分${score}分，这是大多数25岁年轻人的真实状态。<br><br>
+                人生不是赛跑，每个人都有自己的时区。也许你专注于某几个领域深入发展，也许你还在寻找自己的方向——这都很好。接下来的日子里，勇敢地走出舒适区，去体验那些未曾尝试的事物。记住，25岁只是人生的第一章，精彩的故事还在后面。`;
+            } else if (score >= 30) {
+                return `<strong>💎 大器晚成的潜力股</strong><br><br>
+                目前得分${score}分，完成了${count}项。看到这个分数，你可能会有些失落，但请停下来想一想：<br><br>
+                也许你经历了特殊的成长环境，也许你把精力投入在了清单之外的地方，也许你只是起步稍晚。这些都不重要。重要的是，25岁的你此刻正在阅读这段文字，这说明你渴望成长。<br><br>
+                从今天开始，选一件小事去完成。人生是累积的游戏，每一个"第一次"都会打开新的世界。你的故事，才刚刚开始书写最精彩的部分。`;
+            } else {
+                return `<strong>🦋 即将破茧的蝴蝶</strong><br><br>
+                得分${score}分，已完成${count}项。如果你感到焦虑，请深呼吸，听我说：<br><br>
+                这份清单上的任何一项，都不能定义你的价值。25岁不是终点，而是真正的起点。也许你曾经历过困难时期，也许你一直在生存线上挣扎，也许你只是比较晚熟——这些经历本身，就是独特的人生财富。<br><br>
+                请对自己温柔一点。从今天开始，把"完成清单"变成"体验人生"。不需要50项，哪怕只完成一项新的尝试，你就是胜利者。你有足够的时间，去成为你想成为的人。相信自己，你比想象中更有力量。`;
+            }
+        }
+
+        function resetChecklist() {
+            document.querySelectorAll('.item').forEach(item => {
+                item.classList.remove('completed');
+            });
+            updateProgress();
+            document.getElementById('scoreSection').classList.remove('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 添加键盘支持
+        document.querySelectorAll('.item').forEach(item => {
+            item.setAttribute('tabindex', '0');
+            item.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleItem(this);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
