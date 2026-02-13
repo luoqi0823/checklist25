@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>25岁人生已完成清单</title>
+<style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 40px; background: #f7f7f9; }
+    h1 { font-size: 28px; }
+    .item { margin: 8px 0; padding: 10px; background: white; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+    .score { margin-top: 20px; font-size: 20px; font-weight: bold; }
+    button { margin-top: 20px; padding: 10px 18px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; }
+    .result { margin-top: 20px; padding: 15px; background: white; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+</style>
+</head>
+<body>
+
+<h1>🌱 25岁人生已完成清单</h1>
+<p>每完成一项得 2 分，看看你的阶段进度吧。</p>
+
+<div id="checklist"></div>
+
+<button onclick="calculateScore()">计算总分</button>
+
+<div class="score" id="score"></div>
+<div class="result" id="result"></div>
+
+<script>
+const items = [
+"完成学业（高中/大学/职校等）",
+"独立生活过一段时间",
+"拥有稳定的收入来源",
+"第一次真正意义上的恋爱",
+"经历过一次分手或情感挫折",
+"为家人或朋友认真准备过礼物",
+"拥有几位长期联系的朋友",
+"独自旅行或出远门",
+"为未来做过规划（职业/财务）",
+"换过至少一次工作或方向",
+"经历过迷茫期",
+"学会管理个人财务",
+"有过熬夜拼命的时候",
+"有过想辞职或摆烂的时刻",
+"培养过一个兴趣爱好",
+"认真坚持某件事超过3个月",
+"遇到过职场压力",
+"被人误解过",
+"真正理解父母的不易",
+"和家人产生过观念冲突",
+"学会独自解决问题",
+"经历过经济压力",
+"有过存钱目标",
+"有过冲动消费",
+"熬过低落或焦虑阶段",
+"开始关注健康/作息",
+"尝试过运动或健身",
+"有过深夜思考人生的时刻",
+"怀疑过自己的人生选择",
+"逐渐接受自己的普通",
+"意识到时间流逝很快",
+"见证朋友的人生变化",
+"感受过友情疏远",
+"建立过新的社交圈",
+"经历过一次重要失败",
+"收获过一次重要成就感",
+"有过想重新开始的念头",
+"学会与压力共处",
+"开始理解“生活不只靠热情”",
+"对未来既期待又不安",
+"学会拒绝别人",
+"学会接受不完美",
+"更加在意内心感受",
+"开始有自己的价值观",
+"对社会现实有更清晰认知",
+"懂得没有标准人生",
+"逐渐不再盲目比较",
+"有想守护的人或事",
+"开始思考长期生活方式",
+"仍然对某些事情怀有热情"
+];
+
+const container = document.getElementById("checklist");
+
+items.forEach((text, index) => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `<label><input type="checkbox" value="2"> ${index+1}. ${text}</label>`;
+    container.appendChild(div);
+});
+
+function calculateScore() {
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    let score = 0;
+    checkboxes.forEach(cb => { if (cb.checked) score += 2; });
+    
+    document.getElementById("score").innerText = "总分：" + score + " / 100";
+    
+    let message = "";
+    if (score >= 80) {
+        message = "✨ 你已经走过了非常丰富的人生阶段。25岁的你拥有大量经验与认知积累，继续大胆探索吧。";
+    } else if (score >= 50) {
+        message = "🌿 你正处在人生最典型的成长区间。迷茫、尝试、调整都很正常，你并不落后。";
+    } else {
+        message = "💛 你的节奏是独一无二的。人生没有标准答案，慢一点也没关系，你仍在路上。";
+    }
+    
+    document.getElementById("result").innerText = message;
+}
+</script>
+
+</body>
+</html>
