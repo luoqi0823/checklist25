@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25岁人生已完成清单 - 测试</title>
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-sub: #636e72;
+            --accent-color: #00b894;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+
+        /* 计分板吸顶 */
+        .score-board {
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .score-num {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 25px 0 15px 5px;
+            display: flex;
+            align-items: center;
+            color: var(--primary-color);
+        }
+
+        .category-title::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background: var(--primary-color);
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .checklist {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item:active {
+            background-color: #f9f9f9;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .item-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        /* 结果展示区 */
+        #result-section {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            border: 2px dashed var(--primary-color);
+            text-align: center;
+        }
+
+        .result-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .btn-calc {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-calc:hover {
+            transform: scale(1.02);
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            text-align: center;
+            padding-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>✨ 25岁人生已完成清单</h1>
+        <p class="subtitle">属于你的 1/4 人生里程碑回顾</p>
+    </header>
+
+    <div class="score-board">
+        <div>当前得分</div>
+        <div class="score-num" id="live-score">0</div>
+        <div style="font-size: 0.8rem; opacity: 0.9;">满分 100 | 每项 2 分</div>
+    </div>
+
+    <form id="checklist-form">
+        <!-- 学业事业 -->
+        <div class="category-title">💼 学业与事业</div>
+        <div class="checklist" id="cat1"></div>
+
+        <!-- 人际社交 -->
+        <div class="category-title">🤝 人际与社交</div>
+        <div class="checklist" id="cat2"></div>
+
+        <!-- 自我成长 -->
+        <div class="category-title">🌱 自我与成长</div>
+        <div class="checklist" id="cat3"></div>
+
+        <!-- 生活技能 -->
+        <div class="category-title">🏠 生活与技能</div>
+        <div class="checklist" id="cat4"></div>
+
+        <!-- 财务健康 -->
+        <div class="category-title">💰 财务与健康</div>
+        <div class="checklist" id="cat5"></div>
+    </form>
+
+    <button class="btn-calc" onclick="showResult()">生成我的25岁总结</button>
+
+    <div id="result-section">
+        <div class="result-title" id="res-title"></div>
+        <p id="res-desc"></p>
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="border:none; background:none; color:var(--primary-color); cursor:pointer; text-decoration:underline;">重新检查</button>
+    </div>
+
+    <footer>
+        © 2024 人生进度条 · 仅供娱乐与自我激励
+    </footer>
+</div>
+
+<script>
+    const data = [
+        { cat: "cat1", items: ["顺利完成义务教育并拿到学位证", "经历过至少一次熬通宵赶项目", "拥有过一份兼职或实习经历", "拿到人生中第一份正式工作Offer", "领到了第一笔完全靠自己的工资", "熟练使用办公技能(Excel/PPT等)", "进行过一次不怯场的演讲汇报", "经历过职场挫折并挺了过来", "拥有了一张职业名片或电子简历", "给自己买过一件职场战袍"] },
+        { cat: "cat2", items: ["有过一段刻骨铭心或成长的恋爱", "有认识5年以上可深夜通话的好友", "参加过一场令你感动的婚礼", "学会了体面拒绝不舒服的社交", "独立解决过一次家庭矛盾", "给长辈买过一份用工资准备的礼物", "拥有过志同道合的社群经历", "经历过离别并学会好好说再见", "有过一次和老友不远千里的聚会", "保护过比你弱小的人或小动物"] },
+        { cat: "cat3", items: ["独立去过一个从未去过的城市旅行", "养成了一个解压的个人爱好", "成功戒掉了一个坏习惯", "看过至少5本对人生观有影响的书", "经历过至暗时刻并靠自己走出来", "坦然接受不完美，不再容貌焦虑", "拥有一个坚持1年以上的运动习惯", "学会了一门外语基础或方言", "写过一份未来五年的职业/生活规划", "曾为了一件事全力以赴，无论结果"] },
+        { cat: "cat4", items: ["拿到了驾照", "能独立掌勺做一桌请客的拿手菜", "经历过一次说走就走的短途旅行", "搬过一次家，学会打包整理", "拥有一样提升生活质量的小家电", "独立去电影院看一场电影", "学会基本生活急救常识/技巧", "拍过一套记录青春状态的照片", "拥有一个让自己有归属感的居住空间", "深度游览过目前居住的城市"] },
+        { cat: "cat5", items: ["拥有不少于3个月生活费的存款", "开始定期体检并关注指标", "建立了基本的理财规划逻辑", "能独立缴纳水电费、保险等账单", "购买过一份给自己或家人的商保", "拒绝过一次不合理的超前消费", "有过一次“不看价格”的奖励消费", "掌握了营养搭配，不再顿顿外卖", "经历过小病痛并学会科学照顾自己", "对未来养老或财务有了一次严肃思考"] }
+    ];
+
+    // 初始化渲染
+    function init() {
+        data.forEach(group => {
+            const container = document.getElementById(group.cat);
+            group.items.forEach(text => {
+                const label = document.createElement('label');
+                label.className = 'item';
+                label.innerHTML = `
+                    <input type="checkbox" onchange="updateScore()">
+                    <span class="item-text">${text}</span>
+                `;
+                container.appendChild(label);
+            });
+        });
+    }
+
+    // 实时更新分数
+    function updateScore() {
+        const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+        const score = checkedCount * 2;
+        document.getElementById('live-score').innerText = score;
+    }
+
+    // 结果展示逻辑
+    function showResult() {
+        const score = parseInt(document.getElementById('live-score').innerText);
+        const resSection = document.getElementById('result-section');
+        const resTitle = document.getElementById('res-title');
+        const resDesc = document.getElementById('res-desc');
+
+        resSection.style.display = 'block';
+        
+        if (score >= 80) {
+            resTitle.innerText = "🚀 状态：人生头等舱";
+            resDesc.innerText = "你不仅生活在正常的轨迹上，而且完成度极高！在25岁这个年纪，你展现出了远超同龄人的自律与执行力。保持这份节奏，你已经拥有了对抗未确定性的最强底气。";
+        } else if (score >= 60) {
+            resTitle.innerText = "🏃 状态：踏实赶路人";
+            resDesc.innerText = "这是最稳健的25岁状态。你完成了大部分必经之路，虽然偶尔有小缺憾，但正是这些空白给了你未来继续探索的空间。别焦虑，你已经做得很棒了，按自己的步调走就好。";
+        } else if (score >= 40) {
+            resTitle.innerText = "🔍 状态：觉醒探索家";
+            resDesc.innerText = "你的清单里还有很多空白，但这说明你过去几年可能把精力集中在了特定的热爱里。25岁不是终点，而是成年的“元年”。那些没做过的事，正是接下来生活给你的礼物。";
+        } else {
+            resTitle.innerText = "🌈 状态：自由灵魂派";
+            resDesc.innerText = "如果你的得分较低，说明你的生活轨迹相对非主流。25岁还没完成这些事并不可怕，可怕的是丧失了对生活的好奇心。去勾选那些最简单的项目吧，你的精彩才刚刚开始。";
+        }
+        
+        resSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    init();
+</script>
+
+</body>
+</html>
